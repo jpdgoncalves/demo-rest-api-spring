@@ -9,7 +9,7 @@ pipeline {
         stage('Building Jar File') {
             agent {
                 docker {
-                    image { "maven:3.8.1-openjdk-11" }
+                    image "maven:3.8.1-openjdk-11"
                 }
             }
             steps {
