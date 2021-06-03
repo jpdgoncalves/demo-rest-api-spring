@@ -14,7 +14,7 @@ pipeline {
             }
             steps {
                 sh "mvn package"
-                stash includes: "**/target/*.jar" name: "app"
+                stash includes: "**/target/*.jar", name: "app"
             }
         }
         stage('Building image') {
