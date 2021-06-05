@@ -17,6 +17,17 @@ pipeline {
                 stash includes: "**/target/*.jar", name: "app"
             }
         }
+        stage('Testing Jar File') {
+            agent {
+                docker {
+                    image "maven:3.8.1-openjdk-11"
+                }
+            }
+            steps {
+                sh "mvn test"
+                junit "target/surefire-reports/*.xml"
+            }
+        }
         stage('Building image') {
             steps {
                 unstash "app"
