@@ -3,6 +3,8 @@ pipeline {
         registry = "luisferreira1998/demo-spring-rest-api"
         registryCredential = 'esp53-dockerhub'
         dockerImage = ''
+        containerName = 'esp53-spring-demo-api'
+        sshCommandPrefix = 'ssh -o StrictHostKeyChecking=no esp53@192.168.160.87'
     }
     agent any
     stages {
@@ -52,7 +54,14 @@ pipeline {
         }
         stage("Deploy to Playground VM") {
             steps {
-                sh "echo deploying"
+                sshagent(credentials: ["esp53_ssh_key"]) {
+                    sh "$sshCommandPrefix docker stop $containerName || echo Container $containerName isnt running"
+                    sh "$sshCommandPrefix docker rm $containerName || echo Container $containerName doesnt exist"
+                    sh "$sshCommandPrefix docker rmi $registry || echo image $registry doesnt exist"
+                    sh "$sshCommandPrefix docker pull $registry"
+                    sh "$sshCommandPrefix docker create -p 53999:8080 --name $containerName $registry"
+                    sh "$sshCommandPrefix docker $containerName"
+                }
             }
         }
     }
