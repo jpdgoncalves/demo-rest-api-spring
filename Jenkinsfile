@@ -60,7 +60,7 @@ pipeline {
                     sh "$sshCommandPrefix docker rmi $registry || echo image $registry doesnt exist"
                     sh "$sshCommandPrefix docker pull $registry"
                     sh "$sshCommandPrefix docker create -p 53999:8080 --name $containerName $registry"
-                    sh "$sshCommandPrefix docker $containerName"
+                    sh "$sshCommandPrefix docker start $containerName"
                 }
             }
         }
