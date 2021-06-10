@@ -58,8 +58,8 @@ pipeline {
                     sh "$sshCommandPrefix docker stop $containerName || echo Container $containerName isnt running"
                     sh "$sshCommandPrefix docker rm $containerName || echo Container $containerName doesnt exist"
                     sh "$sshCommandPrefix docker rmi $registry || echo image $registry doesnt exist"
-                    sh "$sshCommandPrefix docker pull $registry"
-                    sh "$sshCommandPrefix docker create -p 53999:8080 --name $containerName $registry"
+                    sh "$sshCommandPrefix docker pull $registry:$BUILD_NUMBER"
+                    sh "$sshCommandPrefix docker create -p 53999:8080 --name $containerName $registry:$BUILD_NUMBER"
                     sh "$sshCommandPrefix docker start $containerName"
                 }
             }
